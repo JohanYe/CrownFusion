@@ -1,0 +1,78 @@
+# Training configuration for conditional SiT model
+
+# Model configuration
+model:
+  name: "SiT-B/1"  # choices: SiT-XL/2, SiT-L/2, SiT-B/4, etc.
+  image_size: 512
+  in_channels: 16
+
+# Training configuration
+training:
+  gradient_accumulation_steps: 2
+  use_amp: true  # Enable Automatic Mixed Precision
+  epochs: 3000
+  global_batch_size: 12
+  global_seed: 0
+  num_workers: 4
+  learning_rate: 1e-4
+  weight_decay: 0
+  ema_decay: 0.9999
+
+# Logging and checkpointing
+logging:
+  log_every: 250
+  ckpt_every: 25000
+  sample_every: 5000
+  chamfer_every: 5000
+  results_dir: "./results"
+
+# Data configuration
+data:
+  data_path: "./data/omages"  # Required - path to dataset
+  use_pre_encoded: True
+  encoded_data_path: "./data/encoded_omages"  # required - path to pre-encoded data
+  orig_data_path: "./data/publication"  # root of the dataset with <split>/<id>/ meshes
+
+# VAE configuration
+vae:
+  config_path: "configs/ae_config.yaml"  # AE architecture config
+  ckpt_path: "./results_ae/<run>/checkpoints/checkpoint_epoch_600.pt"  # Required - replace <run> with your AE training run directory
+  n_batches_scaling: 0     # Set to > 0 to calculate from data (e.g., 10 batches), 0 will use pre-calculated
+  scaling_factor: 0.18215
+
+# Transport/diffusion configuration
+transport:
+  path_type: "Linear"
+  prediction: "velocity"
+  loss_weight: "velocity"
+  train_eps: 1e-5
+  sample_eps: 1e-3
+
+# Classifier-free guidance
+cfg:
+  scale: 4.0
+
+# Validation
+validation:
+  chamfer_batches: 50
+
+# Wandb logging
+wandb:
+  enabled: false
+  project: "omages"
+  experiment_name: null  # Set to null for auto-generated names, or specify a custom name
+
+# Debug mode
+debug:
+  enabled: false
+  epochs: 10
+  sample_every: 100
+  log_every: 100
+  ckpt_every: 100
+  chamfer_every: 100
+  global_batch_size: 2
+  num_workers: 0
+
+# Resume training
+resume:
+  ckpt_path: null  # Set to null to start fresh, or provide path to checkpoint to resume

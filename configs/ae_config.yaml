@@ -1,0 +1,77 @@
+project_name: omages_aekl
+results_dir: ./results_ae
+debug_mode: false
+seed: 42
+
+# Wandb logging
+wandb:
+  enabled: false
+  project: "omages_aekl"
+  experiment_name: null  # Set to null for auto-generated names, or specify a custom name
+
+
+trainer:
+  use_amp: true
+  gradient_accumulation_steps: 1
+  resume_from: ''
+  logger_kwargs:
+    mode: "online" # online, offline, disabled
+    tags: ["aekl_geometry"] 
+    notes: "aekl_geometry"
+  check_val_every_n_epoch: 1
+  viz_every_n_epoch: 1
+  save_checkpoint_every_n_epoch: 5
+  max_epochs: 600
+  strategy: "ddp_find_unused_parameters_true"
+  early_stop_patience: 1000
+  extra_kwargs:
+    num_sanity_val_steps: 0
+    enable_model_summary: true
+    precision: '32-true'
+  kl_weight: 0.001  # Weight for the KL divergence loss
+    
+model:
+  network:
+    debug_boundary: False
+    model_id: black-forest-labs/FLUX.1-schnell
+    # model_id: '3dlg-hcvc/aekl_geometry_xyz2xyz'
+    train_encoder: true
+    channel_input: 3
+    channel_output: 3
+    #lambda_mse: 1e-2
+    #from_scratch: False
+    #temp_mode: False
+    #alpha_as_xyz: False
+    #lambda_lpips: 1e-1
+    #lambda_kl: 1e-6
+    #lambda_bce: 1
+    #alpha_bce: False
+    #alpha_lpips: False
+  optimizer:
+    _target_: torch.optim.AdamW
+    lr: 1e-5
+  scheduler:
+    _target_: torch.optim.lr_scheduler.CosineAnnealingLR
+    T_max: 600
+    eta_min: 1.e-7
+
+
+data:
+  GLOBAL_AVERAGE_VERTEX_NORM: 5.215578427705153
+  num_workers: 4
+  batch_size: 2
+  data_path: ./data/omages
+  orig_data_path: ./data/publication
+  image_size: 512
+  omage_type: crown
+
+
+callbacks:
+  vis:
+    no_sanity_check: False
+    every_n_epoch: 2
+    infer_steps: '250'
+    mode: N2G
+    load_compute: False
+    parallel_vis: True
+    visual_indices: [0,1,2,3]

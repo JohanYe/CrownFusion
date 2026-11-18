@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.vscode/
+omage_env/
+
+# Local data, outputs and logs
+data/
+results*/
+wandb/
+slurm_output/
+tmp/
+*.log
+
+# Generated artifacts
+*.ply
+*.obj
