@@ -1,6 +1,8 @@
 # CrownFusion
 
-Project page: <https://crownfusion.github.io/>
+- Project page: <https://crownfusion.github.io/>
+- Paper: <https://doi.org/10.1007/978-3-032-38186-6_44>
+- Dataset: [FDI 16 Crown Dataset](https://doi.org/10.11583/DTU.35039497) on DTU Data (CC BY-NC-SA 4.0)
 
 ![CrownFusion overview: input dentition, point-cloud baseline, and our geometry-image crown](assets/teaser.png)
 
@@ -24,7 +26,10 @@ subfolder); accept its terms on Hugging Face and run `huggingface-cli login` bef
 
 ## Data layout
 
-**Update (17 Nov 2026):** The data is ready for release. Publishing has been delayed because I have graduated and am no longer affiliated with the university, which affects how the data can be hosted and shared. I am actively working on resolving this and will update this page as soon as it is available
+The FDI 16 Crown Dataset is available on DTU Data: <https://doi.org/10.11583/DTU.35039497>. It has 11,513 cases
+(9,513 train / 1,000 val / 1,000 test). Download `CrownFusion.zip` (23.5 GB) and extract it; it unpacks to
+`CrownFusion/`, which is the dataset root with the layout below. File formats are described in `readme.txt` inside
+the archive.
 
 ```
 <root>/
@@ -43,7 +48,7 @@ copied for visualization.
 All paths below are the config defaults; override them with the flags shown.
 
 ```bash
-DATA=/path/to/publication     # dataset root (layout above)
+DATA=/path/to/CrownFusion     # dataset root (layout above)
 
 # 1. Meshes -> crown omages  (writes ./data/omages/crown_{train,val,test}/<id>.npy)
 python create_omages_dataset.py --data-path $DATA --output-dir ./data/omages
@@ -137,7 +142,12 @@ Each stage should complete and write its outputs.
   author    = {Ye, Johan Ziruo and Yan, Xingguang and Hauberg, S{\o}ren and
                Chang, Angel X. and Zhang, Hao and S{\o}ndergaard, Peter Lempel},
   booktitle = {Medical Image Computing and Computer Assisted Intervention (MICCAI)},
-  year      = {2026}
+  series    = {Lecture Notes in Computer Science},
+  volume    = {16889},
+  pages     = {464--474},
+  year      = {2026},
+  doi       = {10.1007/978-3-032-38186-6_44}
+}
 }
 ```
 
@@ -145,3 +155,7 @@ Each stage should complete and write its outputs.
 
 See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). The SiT code in `sit_utils/` and `transport/` is MIT
 licensed (`sit_utils/LICENSE.txt`).
+
+The MIT license in [LICENSE](LICENSE) covers the code only. The FDI 16 Crown Dataset is licensed separately under
+[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) and may only be used for non-commercial
+purposes.
